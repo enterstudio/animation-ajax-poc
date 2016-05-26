@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX pushState test</title>
+</head>
+<body>
+    {% block menu %}
+        <a href="./" class="ajax-this">Home</a>
+        <a href="?page=ajax-1" class="ajax-this">Link 1</a>
+        <a href="?page=ajax-2" class="ajax-this">Link 2</a>
+        <a href="?page=ajax-3" class="ajax-this">Link 3</a>
+        <a href="?page=ajax-4" class="ajax-this">Link 4</a>
+        <a href="?page=ajax-5" class="ajax-this">Link 5</a>
+    {% endblock %}
+
+    <div class="container">
+        {% block container %}
+        {% endblock %}
+    </div>
+
+    <script src="assets/js/ajax.js"></script>
+</body>
+</html>

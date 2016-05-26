@@ -1,0 +1,12 @@
+{% if ajax %}
+    {% set base = 'ajax.twig' %}
+{% else %}
+    {% set base = 'base.twig' %}
+{% endif %}
+
+{% extends base %}
+
+{% block container %}
+    <h1>AJAX 5!</h1>
+    <input type="text">
+{% endblock %}

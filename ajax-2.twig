@@ -1,0 +1,11 @@
+{% if ajax %}
+    {% set base = 'ajax.twig' %}
+{% else %}
+    {% set base = 'base.twig' %}
+{% endif %}
+
+{% extends base %}
+
+{% block container %}
+    <h1>AJAX 2!</h1>
+{% endblock %}
