@@ -1,12 +1,15 @@
 'use strict';
 
+// Utils
 let qsa = document.querySelectorAll.bind(document);
 let qs = document.querySelector.bind(document);
+
+// Vars
 let links = qsa('.ajax-this');
-let ajaxDivContainer = document.createElement('div');
 let bodyContainer = qs('.container');
 
-[].forEach.call(links, function (link) {
+// Add events to links
+[].forEach.call(links, (link) => {
     link.onclick = (e) => {
         let link  = e.target;
 
@@ -16,35 +19,53 @@ let bodyContainer = qs('.container');
     }
 });
 
+// Reinit state on page refresh
+window.onload = function () {
+    if ( history.state ) {
+        initState(history.state);
+    }
+}
+
+// Refetch link on popstate event
 window.onpopstate = function(e) {
-    gotoLink(document.location, e.state, true);
+    gotoLink(document.location, e.state, false);
 };
 
-function gotoLink(href, state = {}, nopush) {
+// Fetch resource and set history entry
+function gotoLink(href = '', state = null, push = true) {
     var inputvalue = qs('input') ? qs('input').value : null;
     var headers = new Headers();
 
+    // Fetch header config
     headers.append('ajax', 'true');
 
-    if ( inputvalue ) {
+    // Set state for current entry with input value
+    if ( inputvalue && push) {
         history.replaceState({value: inputvalue}, document.location, document.location);
     }
 
+    // Fetch the resource
     fetch(href, {headers: headers})
-        .then(function (res) {
+        .then((res) => {
+            // Return response text promise
             return res.text();
         })
-        .then(function (res) {
-            let ajaxBody;
+        .then((res) => {
+            bodyContainer.innerHTML = res;
 
-            ajaxDivContainer.innerHTML = res;
-            ajaxBody = ajaxDivContainer.querySelector('.container').innerHTML;
-            bodyContainer.innerHTML = ajaxBody;
-
-            if ( state.value ) {
-                qs('input').value = state.value;
+            // Reinit state
+            if ( state && state.value ) {
+                initState(state);
             }
 
-            return nopush ? false : history.pushState({}, href, href);
+            // Push new entry in history
+            if ( push ) {
+                history.pushState(state, href, href);
+            }
         });
+}
+
+// Reints state for current history entry with state object
+function initState(state) {
+    qs('input').value = state.value;
 }
